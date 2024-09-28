@@ -17,7 +17,7 @@ const TaskCard = ({ task }: Props) => {
             {task.attachments && task.attachments.length > 0 && (
               <Image
                 // src={`https://pm-s3-images.s3.us-east-2.amazonaws.com/${task.attachments[0].fileURL}`}
-                src={`/${task.attachments[0].fileURL}`}
+                src={`${process.env.NEXT_PUBLIC_IMAGES_BASE_URL}/${task.attachments[0].fileURL}`}
                 alt={task.attachments[0].fileName}
                 width={400}
                 height={200}
