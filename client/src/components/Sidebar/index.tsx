@@ -2,10 +2,8 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
-import { useGetProjectsQuery } from "@/state/api";
-// import { setIsSidebarCollapsed } from "@/state";
-// import { useGetAuthUserQuery, useGetProjectsQuery } from "@/state/api";
-// import { signOut } from "aws-amplify/auth";
+import { useGetAuthUserQuery, useGetProjectsQuery } from "@/state/api";
+import { signOut } from "aws-amplify/auth";
 import {
   AlertCircle,
   AlertOctagon,
@@ -33,27 +31,27 @@ const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(true);
   const [showPriority, setShowPriority] = useState(true);
 
-    const { data: projects } = useGetProjectsQuery();
-    const dispatch = useAppDispatch();
-    const isSidebarCollapsed = useAppSelector(
-      (state) => state.global.isSidebarCollapsed,
-    );
+  const { data: projects } = useGetProjectsQuery();
+  const dispatch = useAppDispatch();
+  const isSidebarCollapsed = useAppSelector(
+    (state) => state.global.isSidebarCollapsed,
+  );
 
-  //   const { data: currentUser } = useGetAuthUserQuery({});
-  //   const handleSignOut = async () => {
-  //     try {
-  //       await signOut();
-  //     } catch (error) {
-  //       console.error("Error signing out: ", error);
-  //     }
-  //   };
-  //   if (!currentUser) return null;
-  //   const currentUserDetails = currentUser?.userDetails;
+  const { data: currentUser } = useGetAuthUserQuery({});
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+  if (!currentUser) return null;
+  const currentUserDetails = currentUser?.userDetails;
 
-    const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
-      transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white
-      ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}
-    `;
+  const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
+    transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white
+    ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}
+  `;
 
   return (
     <div className={sidebarClassNames}>
@@ -77,9 +75,7 @@ const Sidebar = () => {
         {/* TEAM */}
         <div className="flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-700">
           <Image
-            // src="https://pm-s3-images.s3.us-east-2.amazonaws.com/logo.png"
             src={`${process.env.NEXT_PUBLIC_IMAGES_BASE_URL}/logo.png`}
-            // src="/logo.png"
             alt="Logo"
             width={40}
             height={40}
@@ -165,12 +161,12 @@ const Sidebar = () => {
           </>
         )}
       </div>
-      <div className="z-10 mt-32 flex w-full flex-col items-center gap-4 bg-white px-8 py-4 md:hidden dark:bg-black">
+      <div className="z-10 mt-32 flex w-full flex-col items-center gap-4 bg-white px-8 py-4 dark:bg-black md:hidden">
         <div className="flex w-full items-center">
           <div className="align-center flex h-9 w-9 justify-center">
-            {/* {!!currentUserDetails?.profilePictureUrl ? (
+            {!!currentUserDetails?.profilePictureUrl ? (
               <Image
-                src={`https://pm-s3-images.s3.us-east-2.amazonaws.com/${currentUserDetails?.profilePictureUrl}`}
+                src={`${process.env.NEXT_PUBLIC_IMAGES_BASE_URL}/${currentUserDetails?.profilePictureUrl}`}
                 alt={currentUserDetails?.username || "User Profile Picture"}
                 width={100}
                 height={50}
@@ -178,14 +174,14 @@ const Sidebar = () => {
               />
             ) : (
               <User className="h-6 w-6 cursor-pointer self-center rounded-full dark:text-white" />
-            )} */}
+            )}
           </div>
           <span className="mx-3 text-gray-800 dark:text-white">
-            {/* {currentUserDetails?.username} */}
+            {currentUserDetails?.username}
           </span>
           <button
             className="self-start rounded bg-blue-400 px-4 py-2 text-xs font-bold text-white hover:bg-blue-500 md:block"
-            // onClick={handleSignOut}
+            onClick={handleSignOut}
           >
             Sign out
           </button>
@@ -209,9 +205,8 @@ const SidebarLink = ({ href, icon: Icon, label }: SidebarLinkProps) => {
   return (
     <Link href={href} className="w-full">
       <div
-        className={`relative flex cursor-pointer items-center gap-3 transition-colors hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-700 ${
-          isActive ? "bg-gray-100 text-white dark:bg-gray-600" : ""
-        } justify-start px-8 py-3`}
+        className={`relative flex cursor-pointer items-center gap-3 transition-colors hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-700 ${isActive ? "bg-gray-100 text-white dark:bg-gray-600" : ""
+          } justify-start px-8 py-3`}
       >
         {isActive && (
           <div className="absolute left-0 top-0 h-[100%] w-[5px] bg-blue-200" />
